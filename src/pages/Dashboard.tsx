@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Trophy, Star, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+import { TrendingUp, Trophy, Star, Clock, ArrowUp, ArrowDown, Play } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const weekData = [
