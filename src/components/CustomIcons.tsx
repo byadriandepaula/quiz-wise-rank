@@ -1,102 +1,88 @@
 
 import React from 'react';
+import { 
+  Home, 
+  Trophy, 
+  Play, 
+  Crown, 
+  Medal, 
+  Star, 
+  Lock, 
+  CreditCard, 
+  Upload, 
+  Check, 
+  AlertTriangle, 
+  Trash, 
+  Eye, 
+  EyeOff, 
+  Clock, 
+  ChevronDown 
+} from 'lucide-react';
 
 interface CustomIconProps {
   className?: string;
 }
 
 export const HomeIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🏠
-  </div>
+  <Home className={className} />
 );
 
 export const TrophyIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🏆
-  </div>
+  <Trophy className={className} />
 );
 
 export const PlayIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current font-bold`}>
-    ▶
-  </div>
+  <Play className={className} />
 );
 
 export const CrownIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    👑
-  </div>
+  <Crown className={className} />
 );
 
 export const MedalIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🥈
-  </div>
+  <Medal className={className} />
 );
 
 export const StarIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    ⭐
-  </div>
+  <Star className={className} />
 );
 
 export const LockIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🔒
-  </div>
+  <Lock className={className} />
 );
 
 export const CreditCardIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    💳
-  </div>
+  <CreditCard className={className} />
 );
 
 export const UploadIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    📤
-  </div>
+  <Upload className={className} />
 );
 
 export const CheckIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current font-bold`}>
-    ✓
-  </div>
+  <Check className={className} />
 );
 
 export const AlertTriangleIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    ⚠️
-  </div>
+  <AlertTriangle className={className} />
 );
 
 export const TrashIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🗑️
-  </div>
+  <Trash className={className} />
 );
 
 export const EyeIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    👁️
-  </div>
+  <Eye className={className} />
 );
 
 export const EyeOffIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🙈
-  </div>
+  <EyeOff className={className} />
 );
 
 export const ClockIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current`}>
-    🕐
-  </div>
+  <Clock className={className} />
 );
 
 export const ChevronDownIcon = ({ className = "w-4 h-4" }: CustomIconProps) => (
-  <div className={`${className} flex items-center justify-center text-current font-bold`}>
-    ▼
-  </div>
+  <ChevronDown className={className} />
 );
