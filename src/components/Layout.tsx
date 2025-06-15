@@ -3,6 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Trophy, Play, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import NotificationDropdown from './NotificationDropdown';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -53,9 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-wise-green rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
-            </div>
+            <NotificationDropdown />
           </div>
         </div>
       </header>

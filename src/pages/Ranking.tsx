@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -79,7 +78,7 @@ const Ranking = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Ranking Semanal</h1>
+          <h1 className="text-xl font-bold text-foreground">Ranking Semanal</h1>
           <p className="text-muted-foreground">Top 100 jogadores da semana</p>
         </div>
         <div className="text-right">
@@ -90,9 +89,6 @@ const Ranking = () => {
             </span>
           </div>
           <p className="text-lg font-semibold text-wise-green">{timeRemaining} restantes</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            ⚠️ Ranking zera toda quinta-feira às 23h59
-          </p>
         </div>
       </div>
 

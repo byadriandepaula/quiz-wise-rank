@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { User, Mail, Lock, CreditCard, Bell, Trash2, Eye, EyeOff, Moon, Sun, Upload, Check, AlertTriangle } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Settings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [systemMessages, setSystemMessages] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
-  const [pixKeyStatus, setPixKeyStatus] = useState('confirmed'); // confirmed, pending, invalid
+  const [pixKeyStatus, setPixKeyStatus] = useState('confirmed');
+  const { theme, toggleTheme } = useTheme();
 
   const getPixStatusConfig = (status: string) => {
     switch (status) {
@@ -46,7 +47,7 @@ const Settings = () => {
     <div className="space-y-6 pb-16 md:pb-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Configurações</h1>
+        <h1 className="text-xl font-bold text-foreground">Configurações</h1>
         <p className="text-muted-foreground">Gerencie sua conta e preferências</p>
       </div>
 
@@ -240,15 +241,15 @@ const Settings = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              {darkMode ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
+              {theme === 'dark' ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
               <div>
                 <p className="font-medium">Modo Escuro</p>
                 <p className="text-sm text-muted-foreground">Alternar tema da interface</p>
               </div>
             </div>
             <Switch 
-              checked={darkMode}
-              onCheckedChange={setDarkMode}
+              checked={theme === 'dark'}
+              onCheckedChange={toggleTheme}
             />
           </div>
 
