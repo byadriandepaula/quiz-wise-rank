@@ -1,21 +1,49 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trophy, Crown, Medal, Star, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trophy, Crown, Medal, Star, Clock, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const rankingData = [
-  { position: 1, name: 'Maria Silva', points: 2580, prize: 'R$ 150,00' },
-  { position: 2, name: 'Carlos Santos', points: 2450, prize: 'R$ 100,00' },
-  { position: 3, name: 'Ana Costa', points: 2380, prize: 'R$ 100,00' },
-  { position: 4, name: 'Pedro Lima', points: 2280, prize: 'R$ 100,00' },
-  { position: 5, name: 'Julia Ferreira', points: 2180, prize: 'R$ 100,00' },
-  { position: 6, name: 'Bruno Oliveira', points: 2080, prize: 'R$ 70,00' },
-  { position: 7, name: 'Camila Rocha', points: 1980, prize: 'R$ 70,00' },
-  { position: 8, name: 'Diego Alves', points: 1880, prize: 'R$ 70,00' },
-  { position: 9, name: 'Fernanda Luz', points: 1780, prize: 'R$ 70,00' },
-  { position: 10, name: 'Rafael Gomes', points: 1680, prize: 'R$ 70,00' },
-];
+// Geração de dados mock para ranking completo
+const generateRankingData = () => {
+  const names = [
+    'Maria Silva', 'Carlos Santos', 'Ana Costa', 'Pedro Lima', 'Julia Ferreira',
+    'Bruno Oliveira', 'Camila Rocha', 'Diego Alves', 'Fernanda Luz', 'Rafael Gomes',
+    'Lucas Martins', 'Patrícia Souza', 'Roberto Dias', 'Mariana Castro', 'Felipe Nunes',
+    'Isabela Ramos', 'Thiago Barbosa', 'Amanda Correia', 'Daniel Moreira', 'Gabriela Pinto'
+  ];
+  
+  const surnames = ['Silva', 'Santos', 'Costa', 'Lima', 'Ferreira', 'Oliveira', 'Rocha', 'Alves', 'Luz', 'Gomes'];
+  
+  return Array.from({ length: 100 }, (_, index) => {
+    const position = index + 1;
+    let prize = 'R$ 7,00';
+    
+    if (position === 1) prize = 'R$ 150,00';
+    else if (position <= 5) prize = 'R$ 100,00';
+    else if (position <= 10) prize = 'R$ 70,00';
+    else if (position <= 20) prize = 'R$ 30,00';
+    else if (position <= 50) prize = 'R$ 15,00';
+    
+    const basePoints = 2600 - (position * 20) - Math.random() * 50;
+    const points = Math.max(100, Math.floor(basePoints));
+    
+    const nameIndex = index < names.length ? index : Math.floor(Math.random() * names.length);
+    const surnameIndex = Math.floor(Math.random() * surnames.length);
+    const name = index < names.length ? names[nameIndex] : 
+                 `${names[nameIndex].split(' ')[0]} ${surnames[surnameIndex]}`;
+    
+    return {
+      position,
+      name,
+      points,
+      prize
+    };
+  });
+};
+
+const rankingData = generateRankingData();
 
 const prizeRanges = [
   { range: '1º', prize: 'R$ 150,00', color: 'bg-yellow-500' },
@@ -41,6 +69,11 @@ const getPositionStyle = (position: number) => {
 };
 
 const Ranking = () => {
+  const [showAll, setShowAll] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState('2d 14h 32m');
+
+  const displayedData = showAll ? rankingData : rankingData.slice(0, 20);
+
   return (
     <div className="space-y-6 pb-16 md:pb-6">
       {/* Header */}
@@ -56,7 +89,10 @@ const Ranking = () => {
               Encerra: 13/06/2025 às 23:59
             </span>
           </div>
-          <p className="text-lg font-semibold text-wise-green">2d 14h 32m restantes</p>
+          <p className="text-lg font-semibold text-wise-green">{timeRemaining} restantes</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            ⚠️ Ranking zera toda quinta-feira às 23h59
+          </p>
         </div>
       </div>
 
@@ -81,7 +117,7 @@ const Ranking = () => {
         </CardContent>
       </Card>
 
-      {/* User Position */}
+      {/* User Position - Fixed Display */}
       <Card className="wise-card border-wise-green/50 bg-wise-green-pale">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
@@ -90,13 +126,14 @@ const Ranking = () => {
                 <span className="text-white font-bold text-sm">23</span>
               </div>
               <div>
-                <p className="font-semibold">Sua Posição</p>
+                <p className="font-semibold">Sua Posição Atual</p>
                 <p className="text-sm text-muted-foreground">1.250 pontos</p>
               </div>
             </div>
             <div className="text-right">
               <p className="font-semibold text-wise-green">R$ 30,00</p>
               <p className="text-sm text-muted-foreground">Prêmio estimado</p>
+              <p className="text-xs text-wise-green">+45% vs semana anterior</p>
             </div>
           </div>
         </CardContent>
@@ -105,10 +142,10 @@ const Ranking = () => {
       {/* Ranking List */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle>Top 100</CardTitle>
+          <CardTitle>Top 100 - Ranking Semanal</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {rankingData.map((player) => (
+          {displayedData.map((player) => (
             <div
               key={player.position}
               className={cn(
@@ -119,7 +156,7 @@ const Ranking = () => {
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
                   {getPositionIcon(player.position)}
-                  <span className="font-bold text-lg w-6">{player.position}º</span>
+                  <span className="font-bold text-lg w-8">{player.position}º</span>
                 </div>
                 <div>
                   <p className="font-semibold">{player.name}</p>
@@ -132,11 +169,29 @@ const Ranking = () => {
             </div>
           ))}
           
-          <div className="text-center pt-4">
-            <button className="wise-button-secondary px-6 py-2 rounded-lg">
-              Carregar mais posições
-            </button>
-          </div>
+          {!showAll && (
+            <div className="text-center pt-4">
+              <Button 
+                onClick={() => setShowAll(true)}
+                className="wise-button-secondary px-6 py-2 rounded-lg flex items-center space-x-2"
+              >
+                <span>Ver todas as {rankingData.length} posições</span>
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+
+          {showAll && (
+            <div className="text-center pt-4">
+              <Button 
+                onClick={() => setShowAll(false)}
+                variant="outline"
+                className="px-6 py-2 rounded-lg"
+              >
+                Mostrar menos
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

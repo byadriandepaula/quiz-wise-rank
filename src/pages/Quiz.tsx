@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Play, Star, Search, Filter } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Play, Star, Search, Filter, Clock, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const quizzes = [
@@ -13,7 +14,9 @@ const quizzes = [
     difficulty: 'Médio',
     points: 100,
     participants: 1420,
-    category: 'Geografia'
+    category: 'Geografia',
+    createdAt: '2024-06-10',
+    isNew: true
   },
   {
     id: 2,
@@ -22,7 +25,9 @@ const quizzes = [
     difficulty: 'Fácil',
     points: 75,
     participants: 2850,
-    category: 'História'
+    category: 'História',
+    createdAt: '2024-06-05',
+    isNew: false
   },
   {
     id: 3,
@@ -31,7 +36,9 @@ const quizzes = [
     difficulty: 'Difícil',
     points: 150,
     participants: 680,
-    category: 'Ciências'
+    category: 'Ciências',
+    createdAt: '2024-06-12',
+    isNew: true
   },
   {
     id: 4,
@@ -40,7 +47,9 @@ const quizzes = [
     difficulty: 'Médio',
     points: 90,
     participants: 1120,
-    category: 'Literatura'
+    category: 'Literatura',
+    createdAt: '2024-06-08',
+    isNew: false
   },
   {
     id: 5,
@@ -49,7 +58,9 @@ const quizzes = [
     difficulty: 'Fácil',
     points: 120,
     participants: 3250,
-    category: 'Geral'
+    category: 'Geral',
+    createdAt: '2024-06-01',
+    isNew: false
   },
   {
     id: 6,
@@ -58,7 +69,9 @@ const quizzes = [
     difficulty: 'Difícil',
     points: 130,
     participants: 890,
-    category: 'Tecnologia'
+    category: 'Tecnologia',
+    createdAt: '2024-06-11',
+    isNew: true
   }
 ];
 
@@ -88,16 +101,31 @@ const Quiz = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const [sortBy, setSortBy] = useState('');
 
   const categories = ['Todos', 'Geografia', 'História', 'Ciências', 'Literatura', 'Geral', 'Tecnologia'];
   const difficulties = ['Todos', 'Fácil', 'Médio', 'Difícil'];
+  const sortOptions = ['Padrão', 'Mais Recentes', 'Mais Pontos', 'Mais Participantes'];
 
-  const filteredQuizzes = quizzes.filter(quiz => {
-    const matchesSearch = quiz.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || selectedCategory === 'Todos' || quiz.category === selectedCategory;
-    const matchesDifficulty = !selectedDifficulty || selectedDifficulty === 'Todos' || quiz.difficulty === selectedDifficulty;
-    return matchesSearch && matchesCategory && matchesDifficulty;
-  });
+  const filteredAndSortedQuizzes = quizzes
+    .filter(quiz => {
+      const matchesSearch = quiz.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = !selectedCategory || selectedCategory === 'Todos' || quiz.category === selectedCategory;
+      const matchesDifficulty = !selectedDifficulty || selectedDifficulty === 'Todos' || quiz.difficulty === selectedDifficulty;
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'Mais Recentes':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case 'Mais Pontos':
+          return b.points - a.points;
+        case 'Mais Participantes':
+          return b.participants - a.participants;
+        default:
+          return 0;
+      }
+    });
 
   return (
     <div className="space-y-6 pb-16 md:pb-6">
@@ -123,8 +151,8 @@ const Quiz = () => {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
                 <label className="text-sm font-medium mb-2 block">Categoria</label>
                 <select
                   value={selectedCategory}
@@ -139,7 +167,7 @@ const Quiz = () => {
                 </select>
               </div>
 
-              <div className="flex-1">
+              <div>
                 <label className="text-sm font-medium mb-2 block">Dificuldade</label>
                 <select
                   value={selectedDifficulty}
@@ -153,6 +181,28 @@ const Quiz = () => {
                   ))}
                 </select>
               </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Ordenar por</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full p-2 border border-border rounded-md bg-background"
+                >
+                  {sortOptions.map(option => (
+                    <option key={option} value={option === 'Padrão' ? '' : option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <button className="wise-button-secondary p-2 rounded-md w-full flex items-center justify-center space-x-2">
+                  <Filter className="w-4 h-4" />
+                  <span>Limpar Filtros</span>
+                </button>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -160,10 +210,17 @@ const Quiz = () => {
 
       {/* Quiz Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredQuizzes.map((quiz) => (
-          <Card key={quiz.id} className="wise-card hover:shadow-md transition-shadow">
+        {filteredAndSortedQuizzes.map((quiz) => (
+          <Card key={quiz.id} className="wise-card hover:shadow-md transition-shadow relative">
+            {/* New Badge */}
+            {quiz.isNew && (
+              <Badge className="absolute top-3 right-3 bg-wise-green text-white z-10">
+                Novo
+              </Badge>
+            )}
+
             <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between pr-12">
                 <CardTitle className="text-lg">{quiz.name}</CardTitle>
                 <div className={cn("px-2 py-1 rounded text-xs font-medium", getDifficultyColor(quiz.difficulty))}>
                   {quiz.difficulty}
@@ -176,17 +233,23 @@ const Quiz = () => {
             
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Perguntas</p>
-                  <p className="font-semibold">{quiz.questions}</p>
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-muted-foreground">Perguntas</p>
+                    <p className="font-semibold">{quiz.questions}</p>
+                  </div>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Pontos</p>
                   <p className="font-semibold text-wise-green">{quiz.points}</p>
                 </div>
-                <div className="col-span-2">
-                  <p className="text-muted-foreground">Participantes</p>
-                  <p className="font-semibold">{quiz.participants.toLocaleString()}</p>
+                <div className="col-span-2 flex items-center space-x-2">
+                  <Users className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-muted-foreground">Participantes</p>
+                    <p className="font-semibold">{quiz.participants.toLocaleString()}</p>
+                  </div>
                 </div>
               </div>
 
@@ -199,7 +262,7 @@ const Quiz = () => {
         ))}
       </div>
 
-      {filteredQuizzes.length === 0 && (
+      {filteredAndSortedQuizzes.length === 0 && (
         <Card className="wise-card">
           <CardContent className="p-8 text-center">
             <p className="text-muted-foreground">Nenhum quiz encontrado com os filtros selecionados.</p>
