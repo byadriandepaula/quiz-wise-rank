@@ -5,34 +5,45 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { User, Mail, Lock, CreditCard, Bell, Trash2, Eye, EyeOff, Moon, Sun, Upload, Check, AlertTriangle } from 'lucide-react';
+import { User, Bell, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
+import { 
+  LockIcon, 
+  CreditCardIcon, 
+  UploadIcon, 
+  CheckIcon, 
+  AlertTriangleIcon, 
+  TrashIcon, 
+  EyeIcon, 
+  EyeOffIcon 
+} from '@/components/CustomIcons';
 
 const Settings = () => {
+  const { theme, toggleTheme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [systemMessages, setSystemMessages] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [pixKeyStatus, setPixKeyStatus] = useState('confirmed'); // confirmed, pending, invalid
 
   const getPixStatusConfig = (status: string) => {
     switch (status) {
       case 'confirmed':
         return {
-          icon: <Check className="w-4 h-4 text-green-600" />,
+          icon: <CheckIcon className="w-4 h-4 text-green-600" />,
           text: 'Confirmada',
           color: 'text-green-600',
           bgColor: 'bg-green-100'
         };
       case 'pending':
         return {
-          icon: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
+          icon: <AlertTriangleIcon className="w-4 h-4 text-yellow-600" />,
           text: 'Pendente',
           color: 'text-yellow-600',
           bgColor: 'bg-yellow-100'
         };
       default:
         return {
-          icon: <AlertTriangle className="w-4 h-4 text-red-600" />,
+          icon: <AlertTriangleIcon className="w-4 h-4 text-red-600" />,
           text: 'Inválida',
           color: 'text-red-600',
           bgColor: 'bg-red-100'
@@ -46,14 +57,14 @@ const Settings = () => {
     <div className="space-y-6 pb-16 md:pb-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Configurações</h1>
+        <h1 className="text-xl font-bold text-foreground">Configurações</h1>
         <p className="text-muted-foreground">Gerencie sua conta e preferências</p>
       </div>
 
       {/* Account Information */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-base">
             <User className="w-5 h-5 text-wise-green" />
             <span>Informações da Conta</span>
           </CardTitle>
@@ -65,7 +76,7 @@ const Settings = () => {
                 <User className="w-8 h-8 text-white" />
               </div>
               <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <Upload className="w-6 h-6 text-white" />
+                <UploadIcon className="w-6 h-6 text-white" />
               </div>
             </div>
             <div>
@@ -114,8 +125,8 @@ const Settings = () => {
       {/* Password Settings */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Lock className="w-5 h-5 text-wise-green" />
+          <CardTitle className="flex items-center space-x-2 text-base">
+            <LockIcon className="w-5 h-5 text-wise-green" />
             <span>Segurança da Conta</span>
           </CardTitle>
         </CardHeader>
@@ -132,7 +143,7 @@ const Settings = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <EyeOffIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
               </button>
             </div>
           </div>
@@ -166,8 +177,8 @@ const Settings = () => {
       {/* Financial Data */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <CreditCard className="w-5 h-5 text-wise-green" />
+          <CardTitle className="flex items-center space-x-2 text-base">
+            <CreditCardIcon className="w-5 h-5 text-wise-green" />
             <span>Dados Financeiros</span>
           </CardTitle>
         </CardHeader>
@@ -210,7 +221,7 @@ const Settings = () => {
       {/* Notifications and Preferences */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-base">
             <Bell className="w-5 h-5 text-wise-green" />
             <span>Notificações e Preferências</span>
           </CardTitle>
@@ -240,15 +251,15 @@ const Settings = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              {darkMode ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
+              {theme === 'dark' ? <Moon className="w-5 h-5 text-muted-foreground" /> : <Sun className="w-5 h-5 text-muted-foreground" />}
               <div>
                 <p className="font-medium">Modo Escuro</p>
                 <p className="text-sm text-muted-foreground">Alternar tema da interface</p>
               </div>
             </div>
             <Switch 
-              checked={darkMode}
-              onCheckedChange={setDarkMode}
+              checked={theme === 'dark'}
+              onCheckedChange={toggleTheme}
             />
           </div>
 
@@ -263,8 +274,8 @@ const Settings = () => {
       {/* Account Deletion */}
       <Card className="wise-card border-red-200">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-red-600">
-            <Trash2 className="w-5 h-5" />
+          <CardTitle className="flex items-center space-x-2 text-red-600 text-base">
+            <TrashIcon className="w-5 h-5" />
             <span>Zona de Perigo</span>
           </CardTitle>
         </CardHeader>

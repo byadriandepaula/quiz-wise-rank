@@ -1,22 +1,25 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Trophy, Play, Settings, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { HomeIcon, PlayIcon, TrophyIcon } from '@/components/CustomIcons';
+import { NotificationDropdown } from '@/components/NotificationDropdown';
+import { useTheme, ThemeProvider } from '@/hooks/useTheme';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const LayoutContent = ({ children }: LayoutProps) => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: Home },
-    { name: 'Play Quiz', href: '/quiz', icon: Play },
-    { name: 'Ranking', href: '/ranking', icon: Trophy },
+    { name: 'Dashboard', href: '/', icon: HomeIcon },
+    { name: 'Play Quiz', href: '/quiz', icon: PlayIcon },
+    { name: 'Ranking', href: '/ranking', icon: TrophyIcon },
     { name: 'Perfil', href: '/profile', icon: User },
-    { name: 'Configurações', href: '/settings', icon: Settings },
+    { name: 'Configurações', href: '/settings', icon: User },
   ];
 
   return (
@@ -53,9 +56,7 @@ const Layout = ({ children }: LayoutProps) => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-wise-green rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
-            </div>
+            <NotificationDropdown />
           </div>
         </div>
       </header>
@@ -89,6 +90,14 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </nav>
     </div>
+  );
+};
+
+const Layout = ({ children }: LayoutProps) => {
+  return (
+    <ThemeProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </ThemeProvider>
   );
 };
 

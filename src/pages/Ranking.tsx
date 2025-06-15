@@ -1,9 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trophy, Crown, Medal, Star, Clock, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { 
+  TrophyIcon, 
+  CrownIcon, 
+  MedalIcon, 
+  StarIcon, 
+  ClockIcon, 
+  ChevronDownIcon 
+} from '@/components/CustomIcons';
 
 // Geração de dados mock para ranking completo
 const generateRankingData = () => {
@@ -55,10 +61,10 @@ const prizeRanges = [
 ];
 
 const getPositionIcon = (position: number) => {
-  if (position === 1) return <Crown className="w-5 h-5 text-yellow-500" />;
-  if (position <= 3) return <Medal className="w-5 h-5 text-gray-400" />;
-  if (position <= 10) return <Trophy className="w-5 h-5 text-amber-600" />;
-  return <Star className="w-5 h-5 text-wise-green" />;
+  if (position === 1) return <CrownIcon className="w-5 h-5 text-yellow-500" />;
+  if (position <= 3) return <MedalIcon className="w-5 h-5 text-gray-400" />;
+  if (position <= 10) return <TrophyIcon className="w-5 h-5 text-amber-600" />;
+  return <StarIcon className="w-5 h-5 text-wise-green" />;
 };
 
 const getPositionStyle = (position: number) => {
@@ -79,28 +85,25 @@ const Ranking = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Ranking Semanal</h1>
+          <h1 className="text-xl font-bold text-foreground">Ranking Semanal</h1>
           <p className="text-muted-foreground">Top 100 jogadores da semana</p>
         </div>
         <div className="text-right">
           <div className="flex items-center space-x-2">
-            <Clock className="w-4 h-4 text-muted-foreground" />
+            <ClockIcon className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
               Encerra: 13/06/2025 às 23:59
             </span>
           </div>
-          <p className="text-lg font-semibold text-wise-green">{timeRemaining} restantes</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            ⚠️ Ranking zera toda quinta-feira às 23h59
-          </p>
+          <p className="text-base font-semibold text-wise-green">{timeRemaining} restantes</p>
         </div>
       </div>
 
       {/* Prize Information */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Trophy className="w-5 h-5 text-wise-green" />
+          <CardTitle className="flex items-center space-x-2 text-base">
+            <TrophyIcon className="w-5 h-5 text-wise-green" />
             <span>Premiações da Semana</span>
           </CardTitle>
         </CardHeader>
@@ -142,7 +145,7 @@ const Ranking = () => {
       {/* Ranking List */}
       <Card className="wise-card">
         <CardHeader>
-          <CardTitle>Top 100 - Ranking Semanal</CardTitle>
+          <CardTitle className="text-base">Top 100 - Ranking Semanal</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {displayedData.map((player) => (
@@ -156,7 +159,7 @@ const Ranking = () => {
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
                   {getPositionIcon(player.position)}
-                  <span className="font-bold text-lg w-8">{player.position}º</span>
+                  <span className="font-bold text-base w-8">{player.position}º</span>
                 </div>
                 <div>
                   <p className="font-semibold">{player.name}</p>
@@ -176,7 +179,7 @@ const Ranking = () => {
                 className="wise-button-secondary px-6 py-2 rounded-lg flex items-center space-x-2"
               >
                 <span>Ver todas as {rankingData.length} posições</span>
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDownIcon className="w-4 h-4" />
               </Button>
             </div>
           )}
